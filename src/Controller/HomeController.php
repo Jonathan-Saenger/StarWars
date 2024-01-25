@@ -21,4 +21,18 @@ class HomeController extends AbstractController
             'personnages' => $personnages->toArray()['results'],
         ]);
     }
+
+    #[Route('/personnage/{id}', name: 'app_personnage', requirements: ['id' => '\d+'])] //voir documentation Symfony Routing
+    public function personnage(int $id, HttpClientInterface $httpClient): Response
+    {
+        $personnage = $httpClient->request(
+            'GET',
+            'https://swapi.py4e.com/api/people/'.$id,
+        );
+
+        return $this->render('home/personnage.html.twig', [
+            'personnage' => $personnage->toArray(),
+        ]);
+
+    }
 }
